@@ -1,0 +1,2 @@
+ALTER TABLE `areas` 
+ADD COLUMN `acronym` VARCHAR(45) NULL COMMENT '省份简称' AFTER `Name`;
