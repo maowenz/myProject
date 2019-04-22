@@ -1,2 +1,0 @@
-ALTER TABLE `ppp_user` 
-ADD COLUMN `orgId` INT NULL DEFAULT 1 COMMENT '组织ID' AFTER `rate`;
