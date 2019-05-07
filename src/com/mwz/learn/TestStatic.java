@@ -1,6 +1,5 @@
 package com.mwz.learn;
 
-
 public class TestStatic {
 	
 	String str1 = "test1";
