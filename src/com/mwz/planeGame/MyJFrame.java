@@ -1,5 +1,7 @@
 package com.mwz.planeGame;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -7,6 +9,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Date;
+
 
 
 public class MyJFrame extends Frame {
@@ -19,9 +23,14 @@ public class MyJFrame extends Frame {
 	private Image offScreenImage = null;
 	
 	Plane plane = new Plane(planeImage,250,250);
-	//Shell shell = new Shell();
 	
 	Shell [] shells = new Shell[50];
+	
+	Explode explode;
+	
+	Date startTime = new Date();
+	Date endTime;
+	Long timeLimit;
 	
 	/**
 	 * 绘制图形
@@ -29,13 +38,44 @@ public class MyJFrame extends Frame {
 	@Override
 	public void paint(Graphics g) {
 		
+		Color color = g.getColor();
+		
 		g.drawImage(bgImage, 0, 0, null);
 		plane.drawSelf(g);
 		//shell.draw(g);
 		
 		for(int i = 0;i<shells.length;i++) {
 			shells[i].draw(g);
+			
+			//飞机与炮弹进行碰撞检测
+			boolean crash = shells[i].getRect().intersects(plane.getRect());
+			
+			if(crash) {
+				plane.live = false;
+				//碰撞时发生爆炸效果
+				if(explode == null) {
+					explode = new Explode(plane.x, plane.y);
+					endTime = new Date();
+					timeLimit = (endTime.getTime() - startTime.getTime())/1000;
+					
+				}
+				explode.draw(g);
+			}
+			
+			if (!plane.live) {
+				g.setColor(Color.white);
+				Font font = new Font("楷体", Font.HANGING_BASELINE, 35);
+				g.setFont(font);
+				g.drawString("游戏结束，用时"+timeLimit+"秒", 100, 250);
+				//Button button = new Button("重新开始");
+				
+			}
+			
 		}
+		
+		
+		
+		g.setColor(color);
 		
 	}
 	
